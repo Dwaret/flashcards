@@ -1,36 +1,3 @@
 {
-  "flashcardSets": [
-    {
-      "id": "1",
-      "name": "React Native Fundamentals",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus a velit non turpis facilisis sollicitudin id a justo. Quisque leo diam, aliquam et sem vel, cursus pulvinar orci. Etiam et lectus et orci maximus hendrerit. Nunc porttitor erat justo, in placerat mi aliquam et. Donec in augue justo. Vestibulum ut. ",
-      "cards": [
-        {
-          "id": "1",
-          "question": "What is JSX?",
-          "answer": "A syntax extension for JavaScript, used with React to describe what the UI should look like."
-        },
-        {
-          "id": "2",
-          "question": "What is a component?",
-          "answer": "A reusable, independent piece of UI. Components are the building blocks of a React Native app."
-        },
-        {
-          "id": "3",
-          "question": "How do you style a component in React Native?",
-          "answer": "Using the StyleSheet API, which is similar to CSS but uses camelCase properties."
-        },
-        {
-          "id": "4",
-          "question": "What is the difference between React and React Native?",
-          "answer": "React is for building web interfaces, while React Native is for building mobile apps using React."
-        },
-        {
-          "id": "5",
-          "question": "What is the use of useState in React Native?",
-          "answer": "It’s a React hook that allows you to add state to functional components."
-        }
-      ]
-    }
-  ]
+  "flashcardSets": []
 }

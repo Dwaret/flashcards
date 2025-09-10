@@ -9,7 +9,7 @@ interface SetsListItemProp {
   name: string;
   description: string;
   numberOfCards: number;
-  setId: number;
+  setId: string;
 }
 
 export default function SetsListItem({
@@ -20,6 +20,8 @@ export default function SetsListItem({
 }: SetsListItemProp) {
   const [lineCount, setLineCount] = useState(0);
   const [showMore, setShowMore] = useState(false);
+
+  console.log(setId);
 
   function handleShowMore() {
     setShowMore(!showMore);
@@ -32,7 +34,7 @@ export default function SetsListItem({
         <Text
           style={style.description}
           onTextLayout={(e) => setLineCount(e.nativeEvent.lines.length)}
-          numberOfLines={lineCount > 3 && !showMore ? 3 : 0}
+          numberOfLines={lineCount >= 3 && !showMore ? 3 : 0}
         >
           {description}
         </Text>
@@ -61,7 +63,7 @@ export default function SetsListItem({
               />
             ) : null}
 
-            <Link href={`/flashCards?index=${setId - 1}`} asChild>
+            <Link href={`/flashCards?index=${setId}`} asChild>
               <CustomButton
                 buttonText="View"
                 styleText={{

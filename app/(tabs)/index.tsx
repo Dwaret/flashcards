@@ -1,6 +1,7 @@
 import SetsListItem from "@/components/SetsListItem";
 import * as FileSystem from "expo-file-system";
-import { useEffect, useState } from "react";
+import { useFocusEffect } from "expo-router";
+import { useCallback, useState } from "react";
 import { FlatList, StyleSheet } from "react-native";
 import { SearchBar } from "react-native-elements";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -27,14 +28,16 @@ export default function SetsList() {
     itemProp[] | null | undefined
   >(data);
 
-  useEffect(() => {
-    const initialize = async () => {
-      const loadedData = await fetchData();
-      setData(loadedData.flashcardSets);
-    };
+  useFocusEffect(
+    useCallback(() => {
+      const initialize = async () => {
+        const loadedData = await fetchData();
+        setData(loadedData?.flashcardSets ?? []);
+      };
 
-    initialize();
-  }, []);
+      initialize();
+    }, [])
+  );
 
   function updateSearch(search: string): void {
     setSearch(search);
@@ -66,7 +69,7 @@ export default function SetsList() {
             name={item.name}
             description={item.description}
             numberOfCards={item.cards.length}
-            setId={Number(item.id)}
+            setId={item.id}
           />
         )}
         keyExtractor={(item) => item.id}
@@ -83,7 +86,7 @@ async function fetchData() {
       const defaultData = require("@/assets/data/sets.json");
       await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(defaultData));
     }
-
+    console.log(1);
     const fileContent = await FileSystem.readAsStringAsync(fileUri);
     return JSON.parse(fileContent);
   } catch (error) {

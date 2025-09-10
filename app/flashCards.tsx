@@ -1,20 +1,43 @@
 import CustomButton from "@/components/button";
+import * as FileSystem from "expo-file-system";
 import { useLocalSearchParams, useNavigation } from "expo-router";
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import sets from "../assets/data/sets.json";
+
+interface card {
+  id: string;
+  question: string;
+  answer: string;
+}
+
+interface set {
+  id: string;
+  name: string;
+  description: string;
+  cards: card[];
+}
+
+const fileUri = FileSystem.documentDirectory + "sets.json";
 
 export default function FlashCards() {
   const { index } = useLocalSearchParams();
-  const cards = sets.flashcardSets[Number(index)].cards;
+  const [set, setSet] = useState<set | null>(null);
   const [currentCard, setCurrentCard] = useState(0);
   const [showingAnswer, setShowingAnswer] = useState(false);
   const navigation = useNavigation();
 
+  useEffect(() => {
+    const getSet = async () => {
+      setSet(await fetchData(index));
+    };
+
+    getSet();
+  }, [index]);
+
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: sets.flashcardSets[Number(index)].name,
+      title: set?.name,
     });
   });
 
@@ -32,18 +55,20 @@ export default function FlashCards() {
     setShowingAnswer(false);
   }
 
+  console.log(set);
+
   return (
     <SafeAreaView style={style.container}>
       <Pressable onPress={handleCardPress} style={style.cards}>
         {showingAnswer ? (
           <View>
             <Text style={style.text}>ANSWER</Text>
-            <Text style={style.text}>{cards[currentCard].answer}</Text>
+            <Text style={style.text}>{set?.cards[currentCard].answer}</Text>
           </View>
         ) : (
           <View>
             <Text style={style.text}>QUESTION</Text>
-            <Text style={style.text}>{cards[currentCard].question}</Text>
+            <Text style={style.text}>{set?.cards[currentCard].question}</Text>
           </View>
         )}
       </Pressable>
@@ -56,13 +81,19 @@ export default function FlashCards() {
         />
         <CustomButton
           onPress={handleNextCard}
-          disableCondition={currentCard === cards.length - 1}
+          disableCondition={currentCard === (set?.cards.length || 1) - 1}
           buttonText=">"
           styleText={{ fontSize: 50 }}
         />
       </View>
     </SafeAreaView>
   );
+}
+
+async function fetchData(index: string | string[]) {
+  const content = await FileSystem.readAsStringAsync(fileUri);
+  const allData = JSON.parse(content);
+  return allData.flashcardSets.filter((item: set) => item.id === index)[0];
 }
 
 const style = StyleSheet.create({

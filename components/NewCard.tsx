@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useState } from "react";
-import { Text, TextInput, View } from "react-native";
+import { KeyboardAvoidingView, Text, TextInput, View } from "react-native";
 
 interface card {
   id: string;
@@ -24,7 +24,7 @@ export default function NewCard({
   const [editAnswer, setEditAnswer] = useState<string>(answer);
 
   return (
-    <View>
+    <KeyboardAvoidingView>
       <View>
         <Text>{id}</Text>
       </View>
@@ -32,30 +32,30 @@ export default function NewCard({
         <Text>Question</Text>
         <TextInput
           placeholder="question here"
-          onChangeText={(question) => setEditQuestion(question)}
-          value={editQuestion}
-          onBlur={() =>
+          onChangeText={(question) => {
+            setEditQuestion(question);
             setCards((data) =>
               data.map((item) =>
-                item.id === id ? { ...item, question: editQuestion } : item
+                item.id === id ? { ...item, question: question } : item
               )
-            )
-          }
+            );
+          }}
+          value={editQuestion}
         />
         <Text>Answer</Text>
         <TextInput
           placeholder="answer here"
-          onChangeText={(answer) => setEditAnswer(answer)}
-          value={editAnswer}
-          onBlur={() =>
+          onChangeText={(answer) => {
+            setEditAnswer(answer);
             setCards((data) =>
               data.map((item) =>
-                item.id === id ? { ...item, answer: editAnswer } : item
+                item.id === id ? { ...item, answer: answer } : item
               )
-            )
-          }
+            );
+          }}
+          value={editAnswer}
         />
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
